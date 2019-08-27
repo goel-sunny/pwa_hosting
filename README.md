@@ -1,2 +1,4 @@
-# pwa_hosting
-xncv,xncacc
+#pwa_hosting
+
+Thiis is the dummy Project for PWA
+
