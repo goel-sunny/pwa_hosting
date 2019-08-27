@@ -120,6 +120,9 @@ let AppComponent = class AppComponent {
         // here we are pushing the event and some error code variable 
         window.dataLayer.push({ 'event': "ClickCounter", "counter": counter });
     }
+    installPwa() {
+        this.pwa.promptEvent.prompt();
+    }
 };
 AppComponent.ctorParameters = () => [
     { type: _service_fake_req_service__WEBPACK_IMPORTED_MODULE_2__["FakeReqService"] },
