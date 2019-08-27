@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n\n  <h1>Welcome to {{ title }}</h1>\n\n  <button  (click)=\"triggerClick()\" class=\"click-me\"> Click</button>\n\n  <button  (click)=\"setClickCount()\" class=\"click-count\">Click Count</button>\n\n  <button  (click)=\"setErrorCode()\" class=\"http-error\">Http Error</button>\n\n<router-outlet></router-outlet>\n"
+module.exports = "<button *ngIf=\"pwa.promptEvent\" (click)=\"installPwa()\">\n    Install\n  </button>\n<!--The content below is only a placeholder and can be replaced.-->\n<div style=\"text-align:center\">\n\n  <h1>Welcome to {{ title }}</h1>\n\n  <button  (click)=\"triggerClick()\" class=\"click-me\"> Click</button>\n\n  <button  (click)=\"setClickCount()\" class=\"click-count\">Click Count</button>\n\n  <button  (click)=\"setErrorCode()\" class=\"http-error\">Http Error</button>\n\n<router-outlet></router-outlet>\n"
 
 /***/ }),
 
@@ -91,12 +91,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _service_fake_req_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service/fake-req.service */ "./src/app/service/fake-req.service.ts");
+/* harmony import */ var _service_pwa_service_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./service/pwa-service.service */ "./src/app/service/pwa-service.service.ts");
+
 
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(fs) {
+    function AppComponent(fs, pwa) {
         this.fs = fs;
+        this.pwa = pwa;
         this.title = 'Fleet Management System';
     }
     AppComponent.prototype.setErrorCode = function () {
@@ -121,7 +124,8 @@ var AppComponent = /** @class */ (function () {
         window.dataLayer.push({ 'event': "ClickCounter", "counter": counter });
     };
     AppComponent.ctorParameters = function () { return [
-        { type: _service_fake_req_service__WEBPACK_IMPORTED_MODULE_2__["FakeReqService"] }
+        { type: _service_fake_req_service__WEBPACK_IMPORTED_MODULE_2__["FakeReqService"] },
+        { type: _service_pwa_service_service__WEBPACK_IMPORTED_MODULE_3__["PwaService"] }
     ]; };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -156,6 +160,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_service_worker__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/service-worker */ "./node_modules/@angular/service-worker/fesm5/service-worker.js");
 /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _service_pwa_service_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./service/pwa-service.service */ "./src/app/service/pwa-service.service.ts");
+
 
 
 
@@ -182,7 +188,8 @@ var AppModule = /** @class */ (function () {
             ],
             providers: [
                 _service_fake_req_service__WEBPACK_IMPORTED_MODULE_5__["FakeReqService"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"]
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"],
+                _service_pwa_service_service__WEBPACK_IMPORTED_MODULE_9__["PwaService"]
             ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
         })
@@ -217,6 +224,37 @@ var FakeReqService = /** @class */ (function () {
         { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"] }
     ]; };
     return FakeReqService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/service/pwa-service.service.ts":
+/*!************************************************!*\
+  !*** ./src/app/service/pwa-service.service.ts ***!
+  \************************************************/
+/*! exports provided: PwaService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PwaService", function() { return PwaService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var PwaService = /** @class */ (function () {
+    function PwaService() {
+        var _this = this;
+        window.addEventListener('beforeinstallprompt', function (event) {
+            _this.promptEvent = event;
+        });
+    }
+    PwaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()
+    ], PwaService);
+    return PwaService;
 }());
 
 
@@ -271,8 +309,13 @@ __webpack_require__.r(__webpack_exports__);
 if (_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].production) {
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["enableProdMode"])();
 }
-Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformBrowserDynamic"])().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_2__["AppModule"])
-    .catch(function (err) { return console.error(err); });
+// platformBrowserDynamic().bootstrapModule(AppModule)
+//   .catch(err => console.error(err));
+Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformBrowserDynamic"])().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_2__["AppModule"]).then(function () {
+    if ('serviceWorker' in navigator && _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].production) {
+        navigator.serviceWorker.register('/ngsw-worker.js');
+    }
+}).catch(function (err) { return console.log(err); });
 
 
 /***/ }),
